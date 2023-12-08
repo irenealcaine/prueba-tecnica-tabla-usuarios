@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { type User } from './types.d'
 import { UsersList } from './Components/UsersList'
@@ -43,11 +43,14 @@ function App() {
       )
   }, [])
 
-  const filteredUsers = filterCountry !== null && filterCountry.length > 0
-    ? users.filter((user => {
-      return user.location.country.toLowerCase().includes(filterCountry.toLowerCase())
-    }))
-    : users
+  const filteredUsers = useMemo(() => {
+    console.log("AAAAAAAA")
+    return filterCountry !== null && filterCountry.length > 0
+      ? users.filter((user => {
+        return user.location.country.toLowerCase().includes(filterCountry.toLowerCase())
+      }))
+      : users
+  }, [users, filterCountry])
 
   // const sortedUsers = sortByCountry
   //   ? [...users].sort((a, b) => {
@@ -55,11 +58,21 @@ function App() {
   //   })
   //   : users
 
-  const sortedUsers = sortByCountry
-    ? filteredUsers.toSorted((a, b) => {
-      return a.location.country.localeCompare(b.location.country)
-    })
-    : filteredUsers
+  // const sortedUsers = sortByCountry
+  //   ? filteredUsers.toSorted((a, b) => {
+  //     return a.location.country.localeCompare(b.location.country)
+  //   })
+  //   : filteredUsers
+
+  const sortedUsers = useMemo(() => {
+    console.log("EEEEEEEEE")
+
+    return sortByCountry
+      ? filteredUsers.toSorted((a, b) => {
+        return a.location.country.localeCompare(b.location.country)
+      })
+      : filteredUsers
+  }, [filteredUsers, sortByCountry])
 
 
   return (
