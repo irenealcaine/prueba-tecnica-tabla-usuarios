@@ -43,8 +43,9 @@ function App() {
     fetch("https://randomuser.me/api?results=100")
       .then(async res => await res.json())
       .then(res => {
-        setUsers(res.results)
-        originalUsers.current = res.results
+        const results = res.results || [];
+        setUsers(results);
+        originalUsers.current = results;
       })
       .catch(
         err => console.error("No se pudieron obtener los datos: " + err)
